@@ -1,5 +1,5 @@
 class Car {
-  constructor(x, y, width, height) { //100, 100, 30, 50
+  constructor(x, y, width, height, color = 'blue') { //100, 100, 30, 50
     this.x = x;
     this.y = y;
     this.width = width;
@@ -14,6 +14,23 @@ class Car {
 
     this.sensor = new Sensor(this);
     this.controls = new Controls();
+
+    this.img = new Image();
+    this.img.src = "car.png";
+
+    this.mask = document.createElement("canvas");
+    this.mask.width = width;
+    this.mask.height = height;
+
+    const maskCtx = this.mask.getContext("2d");
+    this.img.onload = () => {
+      maskCtx.fillStyle = color;
+      maskCtx.rect(0, 0, this.width, this.height);
+      maskCtx.fill();
+
+      maskCtx.globalCompositeOperation = "destination-atop";
+      maskCtx.drawImage(this.img, 0, 0, this.width, this.height);
+    };
   }
 
 
@@ -60,7 +77,7 @@ class Car {
   }
   draw(ctx) {
 
-    ctx.fillStyle = "black";
+ 
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(-this.angle);
@@ -71,6 +88,14 @@ class Car {
       this.height,
     );
     ctx.fill();
+
+    ctx.drawImage(
+      this.img,
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    );
     ctx.restore();
     this.sensor.draw(ctx);
   }

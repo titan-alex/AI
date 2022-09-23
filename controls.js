@@ -69,7 +69,7 @@ class Controls{
               this.reverse = false;
               break;
               case "w":
-                this.forward = false;console.log(event.key)
+                this.forward = false;
                 break;
             case "d":
                 this.right = false;
